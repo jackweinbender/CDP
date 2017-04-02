@@ -13,6 +13,7 @@ es = ElasticSearch('http://localhost:9200/')
 
 
 class Tablet(db.Model, GlyphMixin):
+    __tablename__ = 'tablet'
     timestamp = db.Column(
         db.DateTime(timezone=True),
         default=db.func.now(),
@@ -250,6 +251,7 @@ class Non_Ruler_Corresp(db.Model, GlyphMixin):
     """
     This holds correspondents who aren't rulers
     """
+    __tablename__ = 'non_ruler_corresp'
     name = db.Column(db.String(100), nullable=False, unique=True)
 
     def __init__(self, name):
@@ -260,6 +262,7 @@ class Author(db.Model, GlyphMixin):
     """
     Tablet authors
     """
+    __tablename__ = 'author'
     name = db.Column(db.String(75), nullable=False, unique=True)
 
     def __init__(self, name):
@@ -271,6 +274,7 @@ class Correspondent(db.Model, GlyphMixin):
     A correspondent can be a ruler or a non-ruler
     Note use of @property to return the correct value
     """
+    __tablename__ = 'correspondent'
     ruler_id = db.Column(
         db.Integer(), db.ForeignKey("ruler.id"), nullable=True)
     non_ruler_id = db.Column(
@@ -304,6 +308,7 @@ class Correspondent(db.Model, GlyphMixin):
 
 
 class Locality(db.Model, GlyphMixin):
+    __tablename__ = 'locality'
     area = db.Column(db.String(100), nullable=False, unique=True)
     # relations
     sub_localities = db.relationship("Sub_Locality", backref="locality")
@@ -320,6 +325,7 @@ class Locality(db.Model, GlyphMixin):
 
 
 class Sub_Locality(db.Model, GlyphMixin):
+    __tablename__ = 'sub_locality'
     name = db.Column(db.String(100), nullable=False, unique=True)
     locality_id = db.Column(
         db.Integer(), db.ForeignKey("locality.id"), nullable=True)
@@ -330,6 +336,7 @@ class Sub_Locality(db.Model, GlyphMixin):
 
 
 class City(db.Model, GlyphMixin):
+    __tablename__ = 'city'
     name = db.Column(db.String(100), nullable=False, unique=True)
     locality_id = db.Column(
         db.Integer(), db.ForeignKey('locality.id'), nullable=True)
@@ -351,6 +358,7 @@ class City(db.Model, GlyphMixin):
 
 
 class City_Site(db.Model, GlyphMixin):
+    __tablename__ = 'city_site'
     name = db.Column(db.String(100), nullable=False, unique=True)
     city_id = db.Column(
         db.Integer(), db.ForeignKey("city.id"), nullable=False)
@@ -361,6 +369,7 @@ class City_Site(db.Model, GlyphMixin):
 
 
 class Method(db.Model, GlyphMixin):
+    __tablename__ = 'method'
     name = db.Column(db.String(50), nullable=False, unique=True)
 
     def __init__(self, name):
@@ -371,6 +380,7 @@ class Method(db.Model, GlyphMixin):
 
 
 class Script_Type(db.Model, GlyphMixin):
+    __tablename__ = 'script_type'
     script = db.Column(db.String(50), nullable=False, unique=True)
 
     def __init__(self, script):
@@ -381,6 +391,7 @@ class Script_Type(db.Model, GlyphMixin):
 
 
 class Year(db.Model, GlyphMixin):
+    __tablename__ = 'year'
     year = db.Column(db.String(14), nullable=False, unique=True)
     eponym_id = db.Column(
         db.Integer(), db.ForeignKey("eponym.id"), nullable=True)
@@ -394,6 +405,7 @@ class Year(db.Model, GlyphMixin):
 
 
 class Medium(db.Model, GlyphMixin):
+    __tablename__ = 'medium'
     name = db.Column(db.String(50), nullable=False, unique=True)
 
     def __init__(self, name):
@@ -404,6 +416,7 @@ class Medium(db.Model, GlyphMixin):
 
 
 class Genre(db.Model, GlyphMixin):
+    __tablename__ = 'genre'
     name = db.Column(db.String(100), nullable=False, unique=True)
 
     def __init__(self, name):
@@ -414,6 +427,7 @@ class Genre(db.Model, GlyphMixin):
 
 
 class Language(db.Model, GlyphMixin):
+    __tablename__ = 'language'
     name = db.Column(db.String(100), nullable=False, unique=True)
 
     # association proxies
@@ -430,6 +444,7 @@ class Language(db.Model, GlyphMixin):
 
 
 class Text_Vehicle(db.Model, GlyphMixin):
+    __tablename__ = 'text_vehicle'
     name = db.Column(db.String(100), nullable=False, unique=True)
     bm_catalogue = db.Column(db.String(100), nullable=True)
     cdli = db.Column(db.String(100), nullable=True)
@@ -449,6 +464,7 @@ class Eponym(db.Model, GlyphMixin):
     """
     Like 'Year of Glad', but for rulers
     """
+    __tablename__ = 'eponym'
     name = db.Column(db.String(50), nullable=False, unique=True)
 
     def __init__(self, name, year=None):
@@ -456,6 +472,7 @@ class Eponym(db.Model, GlyphMixin):
 
 
 class Period(db.Model, GlyphMixin):
+    __tablename__ = 'period'
     name = db.Column(db.String(150), nullable=False, unique=True)
     # should these be links to year?
     from_date = db.Column(db.String(50), nullable=False)
@@ -473,6 +490,7 @@ class Period(db.Model, GlyphMixin):
 
 
 class Sub_Period(db.Model, GlyphMixin):
+    __tablename__ = 'sub_period'
     name = db.Column(db.String(100), nullable=False, unique=True)
     period_id = db.Column(
         db.Integer(), db.ForeignKey("period.id"), nullable=False)
@@ -491,6 +509,7 @@ class Sub_Period(db.Model, GlyphMixin):
         return self.name
 
 class Ruler(db.Model, GlyphMixin):
+    __tablename__ = 'ruler'
     name = db.Column(db.String(100), nullable=False, unique=True)
     # relations
     reigns = db.relationship("Reign", backref="ruler")
@@ -507,6 +526,7 @@ class Ruler(db.Model, GlyphMixin):
 
 
 class Dynasty(db.Model, GlyphMixin):
+    __tablename__ = 'dynasty'
     name = db.Column(db.String(100), nullable=False, unique=True)
     # AP which gives us all sub-periods
     sub_periods = association_proxy(
@@ -522,6 +542,7 @@ class Reign(db.Model, GlyphMixin):
     """
     Rulers have reigns. Sometimes, more than one
     """
+    __tablename__ = 'reign'
     ruler_id = db.Column(
         "ruler_id",
         db.Integer(),
@@ -697,6 +718,7 @@ class Subperiod_Dynasty(db.Model):
 
 class Sign(db.Model, GlyphMixin):
     """ CDP Sign references """
+    __tablename__ = 'sign'
     sign_ref = db.Column(
         db.String(150),
         nullable=False,
@@ -716,6 +738,7 @@ class Sign(db.Model, GlyphMixin):
 
 class Description(db.Model, GlyphMixin):
     """ CDP Sign descriptions """
+    __tablename__ = 'description'
     sign_ref = db.Column(
         db.String(150),
         nullable=False,
@@ -733,6 +756,7 @@ class Description(db.Model, GlyphMixin):
 
 
 class Oracc(db.Model, GlyphMixin):
+    __tablename__ = 'oracc'
     """ CDP Oracc references """
     sign_ref = db.Column(
         db.String(150),
@@ -752,6 +776,7 @@ class Oracc(db.Model, GlyphMixin):
 
 class Cdli(db.Model, GlyphMixin):
     """ CDP CDLI Archaic references """
+    __tablename__ = 'cdli'
     sign_ref = db.Column(
         db.String(150),
         nullable=False,
@@ -772,6 +797,7 @@ class Cdp(db.Model, GlyphMixin):
     """
     Sign identification
     """
+    __tablename__ = 'cdp'
     sign_id = db.Column(
         "sign_id",
         db.Integer(),
@@ -935,6 +961,7 @@ class Function(db.Model, GlyphMixin):
     """
     Instance surface
     """
+    __tablename__ = 'function'
     name = db.Column(
         db.String(50),
         nullable=False,
@@ -948,6 +975,7 @@ class Surface(db.Model, GlyphMixin):
     """
     Instance surface
     """
+    __tablename__ = 'surface'
     name = db.Column(
         db.String(50),
         nullable=False,
@@ -961,6 +989,7 @@ class Column(db.Model, GlyphMixin):
     """
     Instance column
     """
+    __tablename__ = 'column'
     number = db.Column(
         db.String(5),
         nullable=False,
@@ -974,6 +1003,7 @@ class Line(db.Model, GlyphMixin):
     """
     Instance line
     """
+    __tablename__ = 'line'
     number = db.Column(
         db.String(5),
         nullable=False,
@@ -987,6 +1017,7 @@ class Iteration(db.Model, GlyphMixin):
     """
     Instance iterations
     """
+    __tablename__ = 'iteration'
     number = db.Column(
         db.String(5),
         nullable=False,
@@ -1000,6 +1031,7 @@ class Instance(db.Model, GlyphMixin):
     """
     Instances of signs
     """
+    __tablename__ = 'instance'
     tablet_id = db.Column(
         db.Integer(),
         db.ForeignKey("tablet.id", onupdate="CASCADE", ondelete="CASCADE"),
