@@ -1,5 +1,34 @@
 # Cuneiform Digital Palæography Project (CDPP)
 
+## Ubuntu setup notes: 
+
+#! /bin/bash
+
+    # Instrutions for flask setup from: https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-16-04
+
+    # Required packages not included with DO base Ubuntu 16.04
+    sudo apt-get update
+    sudo apt-get install mysql-server nginx python-pip python-dev elasticsearch libmysqlclient-dev libssl-dev yui-compressor
+
+    # mysql setup
+    CREATE DATABASE glyph CHARACTER SET utf8 COLLATE utf8_bin;
+    CREATE USER 'glyph'@'%' IDENTIFIED BY 'glyph';
+    GRANT ALL ON glyph.* TO 'glyph'@'%';
+    exit;
+
+    # Import data
+    mysql -u glyph -p glyph < db_dumps/schema.sql
+    mysql -u glyph -p glyph < db_dumps/glyph_latest.sql
+
+
+    # Global PIP items:
+    sudo pip install virtualenv
+
+    # virtualenv items:
+    pip install gunicorn
+    pip install -R requirements.txt
+
+
 ## Installation (manual, assumes an Apache server)
 1. Ensure you have `git` and `mod_wsgi` installed on your box, install using yum if necessary
 2. Install the Python `Virtualenv` package using yum
